@@ -1,0 +1,789 @@
+{
+	"info": {
+		"_postman_id": "1bb726ba-2ea5-47e3-b0f5-8c9a3e44e472",
+		"name": "Local Docker Stargate",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Document API",
+			"item": [
+				{
+					"name": "Get Auth",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "49d01773-b095-4a48-8fa2-81203c8b2508",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"token\",jsonData.authToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"{{username}}\",\n    \"password\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/v1/auth",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"v1",
+								"auth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Schemas",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8082/v2/schemas/namespaces",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"v2",
+								"schemas",
+								"namespaces"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Schema myworld",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8082/v2/schemas/namespaces/myworld",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"v2",
+								"schemas",
+								"namespaces",
+								"myworld"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Schema myworld",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\" : \"myworld\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/v2/schemas/namespaces",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"v2",
+								"schemas",
+								"namespaces"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Schema myworld",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8082/v2/schemas/namespaces/myworld",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"v2",
+								"schemas",
+								"namespaces",
+								"myworld"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Collection myworld.fitness",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"some-stuff\",\n  \"other\": \"This is nonsensical stuff.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/v2/namespaces/myworld/collections/fitness",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"v2",
+								"namespaces",
+								"myworld",
+								"collections",
+								"fitness"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Collections myworld.fitness",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"some-stuff\",\n  \"other\": \"This is nonsensical stuff.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/v2/namespaces/myworld/collections/fitness?page-size=3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"v2",
+								"namespaces",
+								"myworld",
+								"collections",
+								"fitness"
+							],
+							"query": [
+								{
+									"key": "page-size",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Document",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"some-stuff\",\n  \"other\": \"This is nonsensical stuff.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/v2/namespaces/myworld/collections/fitness",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"v2",
+								"namespaces",
+								"myworld",
+								"collections",
+								"fitness"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Document by documentId",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"some-stuff\",\n  \"other\": \"This is nonsensical stuff.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/v2/namespaces/myworld/collections/fitness/fc0e9124-55aa-463d-a86e-227664b4c9af",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"v2",
+								"namespaces",
+								"myworld",
+								"collections",
+								"fitness",
+								"fc0e9124-55aa-463d-a86e-227664b4c9af"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Document by documentID",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstname\": \"JanetLee\",\n    \"lastname\": \"Doe\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/v2/namespaces/myworld/collections/fitness/5a0b9815-f251-4845-bc8a-adeb7e037803",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"v2",
+								"namespaces",
+								"myworld",
+								"collections",
+								"fitness",
+								"5a0b9815-f251-4845-bc8a-adeb7e037803"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Document",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstname\": \"JanetLee\",\n    \"lastname\": \"Doe\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/v2/namespaces/myworld/collections/fitness/fc0e9124-55aa-463d-a86e-227664b4c9af",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"v2",
+								"namespaces",
+								"myworld",
+								"collections",
+								"fitness",
+								"fc0e9124-55aa-463d-a86e-227664b4c9af"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "GraphQL API",
+			"item": [],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "REST API",
+			"item": [
+				{
+					"name": "Get an auth token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"{{username}}\",\n    \"password\": \"{{password}}\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8081/v1/auth",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"v1",
+								"auth"
+							]
+						},
+						"description": "Before using Stargate's REST API, you have to generate a token to use in the header of subsequent requests."
+					},
+					"response": []
+				},
+				{
+					"name": "Read all keyspaces",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:8082/v2/schemas/keyspaces",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"v2",
+								"schemas",
+								"keyspaces"
+							]
+						},
+						"description": "Get the list of all keyspaces in the database"
+					},
+					"response": []
+				},
+				{
+					"name": "Create a keyspace",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"users_keyspace\",\n    \"replicas\": 1\n}"
+						},
+						"url": {
+							"raw": "localhost:8082/v2/schemas/keyspaces",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"v2",
+								"schemas",
+								"keyspaces"
+							]
+						},
+						"description": "Create a new keyspace"
+					},
+					"response": []
+				},
+				{
+					"name": "Remove a keyspace",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:8082/v2/schemas/keyspaces/users_keyspace",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"v2",
+								"schemas",
+								"keyspaces",
+								"users_keyspace"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a table",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"users\",\n\t\"columnDefinitions\":\n\t  [\n        {\n\t      \"name\": \"firstname\",\n\t      \"typeDefinition\": \"text\"\n\t    },\n        {\n\t      \"name\": \"lastname\",\n\t      \"typeDefinition\": \"text\"\n\t    },\n\t    {\n\t      \"name\": \"email\",\n\t      \"typeDefinition\": \"text\"\n\t    },\n        {\n\t      \"name\": \"favorite color\",\n\t      \"typeDefinition\": \"text\"\n\t    }\n\t  ],\n\t\"primaryKey\":\n\t  {\n\t    \"partitionKey\": [\"firstname\"],\n\t    \"clusteringKey\": [\"lastname\"]\n\t  },\n\t\"tableOptions\":\n\t  {\n\t    \"defaultTimeToLive\": 0,\n\t    \"clusteringExpression\":\n\t      [{ \"column\": \"lastname\", \"order\": \"ASC\" }]\n\t  }\n}"
+						},
+						"url": {
+							"raw": "localhost:8082/v2/schemas/keyspaces/users_keyspace/tables",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"v2",
+								"schemas",
+								"keyspaces",
+								"users_keyspace",
+								"tables"
+							]
+						},
+						"description": "Create a new table in the user_keyspace"
+					},
+					"response": []
+				},
+				{
+					"name": "Remove a table",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:8082/v2/schemas/keyspaces/users_keyspace/tables/users",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"v2",
+								"schemas",
+								"keyspaces",
+								"users_keyspace",
+								"tables",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add a row",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstname\": \"Mookie\",\n    \"lastname\": \"Betts\",\n    \"email\": \"mookie.betts@email.com\",\n    \"favorite color\": \"blue\"\n}"
+						},
+						"url": {
+							"raw": "localhost:8082/v2/keyspaces/users_keyspace/users",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"v2",
+								"keyspaces",
+								"users_keyspace",
+								"users"
+							]
+						},
+						"description": "Add a row to a table"
+					},
+					"response": []
+				},
+				{
+					"name": "Read a row",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "localhost:8082/v2/keyspaces/users_keyspace/users?where={\"firstname\": {\"$eq\": \"Mookie\"}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"v2",
+								"keyspaces",
+								"users_keyspace",
+								"users"
+							],
+							"query": [
+								{
+									"key": "where",
+									"value": "{\"firstname\": {\"$eq\": \"Mookie\"}}"
+								}
+							]
+						},
+						"description": "Read a row from a table"
+					},
+					"response": []
+				},
+				{
+					"name": "Update a row",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"type": "text",
+								"value": "{{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"mookie.betts.new-email@email.com\"\n}"
+						},
+						"url": {
+							"raw": "localhost:8082/v2/keyspaces/users_keyspace/users/Mookie/Betts",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"v2",
+								"keyspaces",
+								"users_keyspace",
+								"users",
+								"Mookie",
+								"Betts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a row",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:8082/v2/keyspaces/users_keyspace/users/Mookie",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"v2",
+								"keyspaces",
+								"users_keyspace",
+								"users",
+								"Mookie"
+							]
+						},
+						"description": "Delete a row from a table"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
