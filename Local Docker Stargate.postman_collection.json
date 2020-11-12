@@ -425,6 +425,19 @@
 			"item": [
 				{
 					"name": "Get an auth token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4159b8d2-24d2-4765-b560-aa9845bd9eac",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"token\",jsonData.authToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
