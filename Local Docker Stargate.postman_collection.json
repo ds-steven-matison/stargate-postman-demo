@@ -417,7 +417,535 @@
 		},
 		{
 			"name": "GraphQL API",
-			"item": [],
+			"item": [
+				{
+					"name": "Get Auth",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ffed69e1-2365-4086-9a42-2a3afb86e854",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"token\",jsonData.authToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"{{username}}\",\n    \"password\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/v1/auth",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"v1",
+								"auth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Keyspace",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation createKeyspaceLibrary {\n  createKeyspace(name:\"library\", replicas: 1)\n}",
+								"variables": ""
+							},
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/graphql-schema",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"graphql-schema"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Keyspace",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetKeyspace {\n  keyspace(name: \"library\") {\n      name\n      dcs {\n          name\n          replicas\n      }\n      tables {\n          name\n          columns {\n              name\n              kind\n              type {\n                  basic\n                  info {\n                      name\n                  }\n              }\n          }\n      }\n  }\n}",
+								"variables": ""
+							},
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/graphql-schema",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"graphql-schema"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Table",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  books: createTable(\n    keyspaceName:\"library\",\n    tableName:\"books\",\n    partitionKeys: [ # The keys required to access your data\n      { name: \"title\", type: {basic: TEXT} }\n    ]\n    values: [ # The values associated with the keys\n      { name: \"author\", type: {basic: TEXT} }\n    ]\n  )\n  authors: createTable(\n    keyspaceName:\"library\",\n    tableName:\"authors\",\n    partitionKeys: [\n      { name: \"name\", type: {basic: TEXT} }\n    ]\n    clusteringKeys: [ # Secondary key used to access values within the partition\n      { name: \"title\", type: {basic: TEXT}, order: \"ASC\" }\n  \t]\n  )\n}",
+								"variables": ""
+							},
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/graphql-schema",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"graphql-schema"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Tables",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetTables {\n  keyspace(name: \"library\") {\n      name\n      tables {\n          name\n          columns {\n              name\n              kind\n              type {\n                  basic\n                  info {\n                      name\n                  }\n              }\n          }\n      }\n  }\n}",
+								"variables": ""
+							},
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/graphql-schema",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"graphql-schema"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Rows",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  alterTableAdd(\n    keyspaceName:\"library\",\n    tableName:\"books\",\n    toAdd:[{\n      name: \"isbn\",\n      type: {\n        basic: TEXT\n      }\n    }]\n  )\n}",
+								"variables": ""
+							},
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/graphql-schema",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"graphql-schema"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Column",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  alterTableAdd(\n    keyspaceName:\"library\",\n    tableName:\"books\",\n    toAdd:[{\n      name: \"isbn\",\n      type: {\n        basic: TEXT\n      }\n    }]\n  )\n}",
+								"variables": ""
+							},
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/graphql-schema",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"graphql-schema"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Column",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n    alterTableDrop(\n    keyspaceName:\"library\",\n    tableName:\"books\",\n    toDrop:[\"isbn\"]\n  )\n}",
+								"variables": ""
+							},
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/graphql-schema",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"graphql-schema"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Drop Table",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  dropTable(keyspaceName:\"library\",\n    tableName:\"books\")\n}",
+								"variables": ""
+							},
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/graphql-schema",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"graphql-schema"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Drop Keyspace",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  dropKeyspace(keyspaceName:\"library2\")\n}",
+								"variables": ""
+							},
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/graphql-schema",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"graphql-schema"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Write Data",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  moby: insertBooks(value: {title:\"Moby Dick\", author:\"Herman Melville\"}) {\n    value {\n      title\n    }\n  }\n  catch22: insertBooks(value: {title:\"Catch-22\", author:\"Joseph Heller\"}) {\n    value {\n      title\n    }\n  }\n}",
+								"variables": ""
+							},
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/graphql/library",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"graphql",
+								"library"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read Data",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query oneBook {\n    books (value: {title:\"Moby Dick\"}) {\n      values {\n      \ttitle\n      \tauthor\n      }\n    }\n}",
+								"variables": ""
+							},
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/graphql/library",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"graphql",
+								"library"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Data",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation updateABook {\n  moby: updateBooks(value: {title:\"Moby Dick\", author:\"Herman Melville\", isbn: \"9780140861723\"}, ifExists: true ) {\n    value {\n      title\n      author\n      isbn\n    }\n  }\n}",
+								"variables": ""
+							},
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/graphql/library",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"graphql",
+								"library"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Data",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Cassandra-Token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation deleteABook {\n  PaP: deleteBooks(value: {title:\"Pride and Prejudice\"}, ifExists: true ) {\n    value {\n      title\n    }\n  }\n}",
+								"variables": ""
+							},
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/graphql/library",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"graphql",
+								"library"
+							]
+						}
+					},
+					"response": []
+				}
+			],
 			"protocolProfileBehavior": {}
 		},
 		{
