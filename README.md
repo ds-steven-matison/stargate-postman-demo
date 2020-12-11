@@ -4,7 +4,7 @@
 This collection and environment is tested against stargate docker:
 
 ```
-docker pull stargateio/stargate-3_11:v0.0.8
+docker pull stargateio/stargate-3_11:v1.0.0
 docker run --name stargate \
   -p 8080:8080 \
   -p 8081:8081 \
@@ -14,11 +14,11 @@ docker run --name stargate \
   -e CLUSTER_NAME=stargate \
   -e CLUSTER_VERSION=3.11 \
   -e DEVELOPER_MODE=true \
-  stargateio/stargate-3_11:v0.0.8
+  stargateio/stargate-3_11:1.0.0
 ```
 
 # Get Postman
 - https://www.postman.com/downloads/
 
 # Stargate Documentation
-- https://stargate.io/docs/stargate/0.1/quickstart/quickstart.html
+- https://stargate.io/docs
