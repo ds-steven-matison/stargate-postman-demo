@@ -1,6 +1,8 @@
 # stargate-postman-demo
  A Postman demonstration of all of the Rest, Document, and GraphQL API Calls in Stargate Documentation.
 
+ Check out my [Stargate](https://ds-steven-matison.github.io/stargate/) blog.
+
 This collection and environment is tested against stargate docker:
 
 ```
